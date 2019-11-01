@@ -2,11 +2,7 @@
 
 Test For Accedo Company
 
-- Clone Master
-
-    Or if have some issues 
-
-- clone master and change branch to feature/update and pull changes - this branch already have the most complete tasks.
+- Clone Master or feature/update
 
 # the test has created only in code without storyboards, using Xcode 11.2, in swift 5.1, iOS 13
 
