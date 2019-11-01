@@ -35,6 +35,10 @@ class HomeController: UIViewController {
     var characters = [Characters]()
     var isPaginated = false
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.9097761512, green: 0.9097753167, blue: 0.9140068293, alpha: 1)

@@ -29,6 +29,7 @@
 		524ABD6E236B98210002AFF6 /* NetworkDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524ABD6D236B98210002AFF6 /* NetworkDetail.swift */; };
 		524ABD70236BA6530002AFF6 /* Characters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524ABD6F236BA6530002AFF6 /* Characters.swift */; };
 		524ABD72236BD3FA0002AFF6 /* DetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524ABD71236BD3FA0002AFF6 /* DetailCell.swift */; };
+		524ABD74236BE1D00002AFF6 /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524ABD73236BE1D00002AFF6 /* StatusBar.swift */; };
 		52CC7169236A1B2300AAFD88 /* NetworkHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CC7168236A1B2300AAFD88 /* NetworkHome.swift */; };
 		52CC716C236A9AE300AAFD88 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CC716B236A9AE300AAFD88 /* Result.swift */; };
 		52CC716E236A9B4200AAFD88 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CC716D236A9B4200AAFD88 /* Endpoint.swift */; };
@@ -86,6 +87,7 @@
 		524ABD6D236B98210002AFF6 /* NetworkDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDetail.swift; sourceTree = "<group>"; };
 		524ABD6F236BA6530002AFF6 /* Characters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Characters.swift; sourceTree = "<group>"; };
 		524ABD71236BD3FA0002AFF6 /* DetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCell.swift; sourceTree = "<group>"; };
+		524ABD73236BE1D00002AFF6 /* StatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
 		52CC7168236A1B2300AAFD88 /* NetworkHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHome.swift; sourceTree = "<group>"; };
 		52CC716B236A9AE300AAFD88 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		52CC716D236A9B4200AAFD88 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				5240E69D23690BEE00E370F1 /* Hashting.swift */,
 				524ABD63236B78C50002AFF6 /* DeviceCheck.swift */,
 				524ABD65236B88200002AFF6 /* RangeReorder.swift */,
+				524ABD73236BE1D00002AFF6 /* StatusBar.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -570,6 +573,7 @@
 				5240E69E23690BEE00E370F1 /* Hashting.swift in Sources */,
 				52CC7169236A1B2300AAFD88 /* NetworkHome.swift in Sources */,
 				524ABD70236BA6530002AFF6 /* Characters.swift in Sources */,
+				524ABD74236BE1D00002AFF6 /* StatusBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

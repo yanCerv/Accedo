@@ -12,6 +12,15 @@ class DetailController: UIViewController {
     let network = NetworkDetail()
     let character: Characters
     
+    var activityIndicatorView: UIActivityIndicatorView = {
+        let aiv = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.large)
+        aiv.color = .darkGray
+        aiv.startAnimating()
+        aiv.hidesWhenStopped = true
+        aiv.translatesAutoresizingMaskIntoConstraints = false
+        return aiv
+    }()
+    
     let scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.alwaysBounceVertical = true
@@ -65,36 +74,72 @@ class DetailController: UIViewController {
         return collection
     }()
     
+    let noFoundLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: UIDevice.getFloatValue(phone: 20, iPad: 24))
+        label.numberOfLines = 1
+        label.text = "No Comics Found"
+        label.isHidden = true
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     var comics = [Comic]()
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupViews()
+        setupNavigationItems()
         getDetails()
     }
+    
     init(character: Characters) {
         self.character = character
         super.init(nibName: nil, bundle: nil)
     }
+    
     required init?(coder: NSCoder) {
         fatalError("Error Init Coder")
     }
     
+    private func setupNavigationItems() {
+        navigationItem.title = "Details"
+        
+        navigationController?.navigationBar.tintColor = .white
+        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
+    }
+    
     private func getDetails() {
         ApiKeys.offSet = 1
-        let dispatchGroup = DispatchGroup()
-        
-        dispatchGroup.enter()
-        network.getDetails(feed: .getDetails) { (result) in
-            dispatchGroup.leave()
+        let dispachGroup = DispatchGroup()
+        dispachGroup.enter()
+        network.getDetails(feed: .getDetails) { [weak self] (result) in
+            dispachGroup.leave()
+            self?.activityIndicatorView.stopAnimating()
             switch result {
             case .error(let error):
                 print(error.localizedDescription)
             case .success(let resources):
-                self.comics = resources?.data.results ?? []
-                self.collectionView.reloadData()
+                self?.comics = resources?.data.results ?? []
+                if self?.comics.count == 0 {
+                    self?.noFoundLabel.isHidden = false
+                } else {
+                    self?.noFoundLabel.isHidden = true
+                }
             }
+        }
+        
+        dispachGroup.notify(queue: .main) { [weak self] in
+            self?.activityIndicatorView.stopAnimating()
+            self?.collectionView.reloadData()
         }
     }
     
@@ -136,6 +181,19 @@ class DetailController: UIViewController {
         collectionView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 160, iPad: 240)).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -25).isActive = true
+        
+        collectionView.addSubview(activityIndicatorView)
+        collectionView.addSubview(noFoundLabel)
+        
+        noFoundLabel.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor).isActive = true
+        noFoundLabel.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor).isActive = true
+        noFoundLabel.widthAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 300, iPad: 350)).isActive = true
+        noFoundLabel.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 100, iPad: 150)).isActive = true
+        
+        activityIndicatorView.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor).isActive = true
+        activityIndicatorView.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor).isActive = true
+        activityIndicatorView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        activityIndicatorView.widthAnchor.constraint(equalToConstant: 40).isActive = true
         
         let url = URL(string: character.thumbnail.path + "." + character.thumbnail.imgExtension)!
         characterImage.sd_setImage(with: url)
