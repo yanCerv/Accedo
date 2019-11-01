@@ -162,11 +162,11 @@ class DetailController: UIViewController {
         characterImage.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10).isActive = true
         characterImage.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 350, iPad: 700)).isActive = true
         
-        descriptionLabel.topAnchor.constraint(equalTo: characterImage.bottomAnchor, constant: 10).isActive = true
+        descriptionLabel.topAnchor.constraint(equalTo: characterImage.bottomAnchor, constant: UIDevice.getFloatValue(phone: 14, iPad: 20)).isActive = true
         descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15).isActive = true
         descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15).isActive = true
         
-        collectionView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10).isActive = true
+        collectionView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: UIDevice.getFloatValue(phone: 14, iPad: 20)).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 280, iPad: 350)).isActive = true

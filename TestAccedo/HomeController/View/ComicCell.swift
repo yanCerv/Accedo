@@ -15,9 +15,14 @@ class ComicCell: UITableViewCell {
         didSet {
             guard let character = characters else { return }
             nameLabel.text = character.name
-            let url = URL(string: character.thumbnail.path + "." + character.thumbnail.imgExtension)
-            characterImage.sd_imageIndicator = SDWebImageActivityIndicator.gray
-            characterImage.sd_setImage(with: url)
+            let stringContain = character.thumbnail.path.contains("image_not_available")
+            if stringContain {
+                characterImage.image = UIImage(named: "placeholder")
+            } else {
+                let url = URL(string: character.thumbnail.path + "." + character.thumbnail.imgExtension)
+                characterImage.sd_imageIndicator = SDWebImageActivityIndicator.gray
+                characterImage.sd_setImage(with: url)
+            }
         }
     }
     
