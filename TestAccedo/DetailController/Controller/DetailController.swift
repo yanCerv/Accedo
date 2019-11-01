@@ -169,7 +169,7 @@ class DetailController: UIViewController {
         collectionView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 160, iPad: 240)).isActive = true
+        collectionView.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 280, iPad: 350)).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -25).isActive = true
         
         collectionView.addSubview(noFoundLabel)
@@ -204,7 +204,7 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: UIDevice.getFloatValue(phone: 110, iPad: 180), height: UIDevice.getFloatValue(phone: 150, iPad: 240))
+        return CGSize(width: UIDevice.getFloatValue(phone: 140, iPad: 200), height: UIDevice.getFloatValue(phone: 270, iPad: 340))
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

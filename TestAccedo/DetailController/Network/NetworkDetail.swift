@@ -19,9 +19,9 @@ class NetworkDetail: ApiClient {
         self.init(configuration: .default)
     }
     
-    func getDetails(feed: FeedDetail, completion: @escaping (Result<DataComicResource?, ErrorHandler>) -> Void) {
-        fetchData(request: feed.request, decode: { (json) -> DataComicResource? in
-            guard let resource = json as? DataComicResource else { return nil }
+    func getDetails(feed: FeedDetail, completion: @escaping (Result<Resource<DataResources<Comic>>?, ErrorHandler>) -> Void) {
+        fetchData(request: feed.request, decode: { (json) -> Resource<DataResources<Comic>>? in
+            guard let resource = json as? Resource<DataResources<Comic>> else { return nil }
             return resource
         }, completion: completion)
     }
