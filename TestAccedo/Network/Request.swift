@@ -31,13 +31,15 @@ extension ApiClient {
                         let model = try JSONDecoder().decode(decodingType, from: data)
                         completion(model, nil)
                     } catch {
-                        print(error.localizedDescription)
+                        print("Error in some parameter struct cannot convert: ", error.localizedDescription)
                         completion(nil, .jsonConversionFailure)
                     }
                 } else {
+                    print("Error on data is invalid: ", error?.localizedDescription ?? "")
                     completion(nil, .invalidData)
                 }
             } else {
+                print("Error in response: ", error?.localizedDescription ?? "")
                 completion(nil, .responseUnsuccessfull)
             }
         }

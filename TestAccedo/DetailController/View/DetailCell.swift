@@ -15,6 +15,7 @@ class DetailCell: UICollectionViewCell {
         didSet {
             guard let comic = comic else { return }
             let url = URL(string: comic.thumbnail.path + "." + comic.thumbnail.imgExtension)!
+            characterImage.sd_imageIndicator = SDWebImageActivityIndicator.gray
             characterImage.sd_setImage(with: url)
         }
     }

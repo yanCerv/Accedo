@@ -7,19 +7,11 @@
 //
 
 import UIKit
+import SDWebImage
 
 class DetailController: UIViewController {
     let network = NetworkDetail()
     let character: Characters
-    
-    var activityIndicatorView: UIActivityIndicatorView = {
-        let aiv = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.large)
-        aiv.color = .darkGray
-        aiv.startAnimating()
-        aiv.hidesWhenStopped = true
-        aiv.translatesAutoresizingMaskIntoConstraints = false
-        return aiv
-    }()
     
     let scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -123,7 +115,6 @@ class DetailController: UIViewController {
         dispachGroup.enter()
         network.getDetails(feed: .getDetails) { [weak self] (result) in
             dispachGroup.leave()
-            self?.activityIndicatorView.stopAnimating()
             switch result {
             case .error(let error):
                 print(error.localizedDescription)
@@ -138,7 +129,6 @@ class DetailController: UIViewController {
         }
         
         dispachGroup.notify(queue: .main) { [weak self] in
-            self?.activityIndicatorView.stopAnimating()
             self?.collectionView.reloadData()
         }
     }
@@ -182,7 +172,6 @@ class DetailController: UIViewController {
         collectionView.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 160, iPad: 240)).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -25).isActive = true
         
-        collectionView.addSubview(activityIndicatorView)
         collectionView.addSubview(noFoundLabel)
         
         noFoundLabel.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor).isActive = true
@@ -190,12 +179,8 @@ class DetailController: UIViewController {
         noFoundLabel.widthAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 300, iPad: 350)).isActive = true
         noFoundLabel.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 100, iPad: 150)).isActive = true
         
-        activityIndicatorView.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor).isActive = true
-        activityIndicatorView.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor).isActive = true
-        activityIndicatorView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        activityIndicatorView.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        
         let url = URL(string: character.thumbnail.path + "." + character.thumbnail.imgExtension)!
+        characterImage.sd_imageIndicator = SDWebImageActivityIndicator.gray
         characterImage.sd_setImage(with: url)
         nameLabel.text = character.name
         if character.description == "" {

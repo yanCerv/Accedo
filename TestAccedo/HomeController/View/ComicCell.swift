@@ -16,6 +16,7 @@ class ComicCell: UITableViewCell {
             guard let character = characters else { return }
             nameLabel.text = character.name
             let url = URL(string: character.thumbnail.path + "." + character.thumbnail.imgExtension)
+            characterImage.sd_imageIndicator = SDWebImageActivityIndicator.gray
             characterImage.sd_setImage(with: url)
         }
     }

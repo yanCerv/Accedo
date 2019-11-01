@@ -54,40 +54,40 @@ class HomeController: UIViewController {
     }
     
     private func getCharacters() {
-        network.getCharacter(feed: .getCharacters) { (result) in
-            self.refreshControl.endRefreshing()
-            sleep(1)
+        network.getCharacter(feed: .getCharacters) { [weak self] (result) in
+            self?.refreshControl.endRefreshing()
             switch result {
             case .error(let error):
                 print(error)
+                self?.showAlert(title: "Error", message: "Error ocurred try again or more later", style: .alert)
             case .success(let resources):
-                self.characters = resources?.data.results ?? []
-                self.tableView.reloadData()
-                self.activityIndicatorView.stopAnimating()
-                let sum = ApiKeys.offSet + 10
-                ApiKeys.offSet = sum
-                self.isPaginated = false
+                self?.characters = resources?.data.results ?? []
+                self?.updateData()
             }
         }
     }
     
     private func loadMoreCharacters() {
-        activityIndicatorView.startAnimating()
         network.getCharacter(feed: .getCharacters) { [weak self] (result) in
-            self?.activityIndicatorView.stopAnimating()
             switch result {
             case .error(let error):
                 print(error)
+                self?.showAlert(title: "Error", message: "Error ocurred try again or more later", style: .alert)
             case .success(let resources):
                 self?.characters += resources?.data.results ?? []
-                let all = self?.characters.filterDuplicate { ( $0.id, $0.name, $0.thumbnail)}
+                let all = self?.characters.filterDuplicate { ( $0 )}
                 self?.characters = all ?? []
-                let sum = ApiKeys.offSet + 9
-                ApiKeys.offSet = sum
-                self?.tableView.reloadData()
+                self?.updateData()
                 self?.isPaginated = false
             }
         }
+    }
+    
+    func updateData() {
+        let sum = ApiKeys.offSet + 9
+        ApiKeys.offSet = sum
+        tableView.reloadData()
+        activityIndicatorView.stopAnimating()
     }
     
     private func setupRefreshControl() {
