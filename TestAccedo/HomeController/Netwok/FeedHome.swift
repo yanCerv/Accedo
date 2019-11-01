@@ -1,5 +1,5 @@
 //
-//  Feed.swift
+//  FeedHome.swift
 //  TestAccedo
 //
 //  Created by MacBook Pro on 30/10/19.
@@ -8,11 +8,11 @@
 
 import Foundation
 
-enum Feed {
+enum FeedHome {
     case getCharacters
 }
 
-extension Feed: Endpoint {
+extension FeedHome: Endpoint {
     var base: String {
         switch self {
         case .getCharacters:

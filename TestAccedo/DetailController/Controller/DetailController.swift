@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class DetailController: UIViewController {
     let network = NetworkDetail()
@@ -65,36 +66,70 @@ class DetailController: UIViewController {
         return collection
     }()
     
+    let noFoundLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: UIDevice.getFloatValue(phone: 20, iPad: 24))
+        label.numberOfLines = 1
+        label.text = "No Comics Found"
+        label.isHidden = true
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     var comics = [Comic]()
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupViews()
+        setupNavigationItems()
         getDetails()
     }
+    
     init(character: Characters) {
         self.character = character
         super.init(nibName: nil, bundle: nil)
     }
+    
     required init?(coder: NSCoder) {
         fatalError("Error Init Coder")
     }
     
+    private func setupNavigationItems() {
+        navigationItem.title = "Details"
+        
+        navigationController?.navigationBar.tintColor = .white
+        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
+    }
+    
     private func getDetails() {
         ApiKeys.offSet = 1
-        let dispatchGroup = DispatchGroup()
-        
-        dispatchGroup.enter()
-        network.getDetails(feed: .getDetails) { (result) in
-            dispatchGroup.leave()
+        let dispachGroup = DispatchGroup()
+        dispachGroup.enter()
+        network.getDetails(feed: .getDetails) { [weak self] (result) in
+            dispachGroup.leave()
             switch result {
             case .error(let error):
                 print(error.localizedDescription)
             case .success(let resources):
-                self.comics = resources?.data.results ?? []
-                self.collectionView.reloadData()
+                self?.comics = resources?.data.results ?? []
+                if self?.comics.count == 0 {
+                    self?.noFoundLabel.isHidden = false
+                } else {
+                    self?.noFoundLabel.isHidden = true
+                }
             }
+        }
+        
+        dispachGroup.notify(queue: .main) { [weak self] in
+            self?.collectionView.reloadData()
         }
     }
     
@@ -127,17 +162,25 @@ class DetailController: UIViewController {
         characterImage.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10).isActive = true
         characterImage.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 350, iPad: 700)).isActive = true
         
-        descriptionLabel.topAnchor.constraint(equalTo: characterImage.bottomAnchor, constant: 10).isActive = true
+        descriptionLabel.topAnchor.constraint(equalTo: characterImage.bottomAnchor, constant: UIDevice.getFloatValue(phone: 14, iPad: 20)).isActive = true
         descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15).isActive = true
         descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15).isActive = true
         
-        collectionView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10).isActive = true
+        collectionView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: UIDevice.getFloatValue(phone: 14, iPad: 20)).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 160, iPad: 240)).isActive = true
+        collectionView.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 280, iPad: 350)).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -25).isActive = true
         
+        collectionView.addSubview(noFoundLabel)
+        
+        noFoundLabel.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor).isActive = true
+        noFoundLabel.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor).isActive = true
+        noFoundLabel.widthAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 300, iPad: 350)).isActive = true
+        noFoundLabel.heightAnchor.constraint(equalToConstant: UIDevice.getFloatValue(phone: 100, iPad: 150)).isActive = true
+        
         let url = URL(string: character.thumbnail.path + "." + character.thumbnail.imgExtension)!
+        characterImage.sd_imageIndicator = SDWebImageActivityIndicator.gray
         characterImage.sd_setImage(with: url)
         nameLabel.text = character.name
         if character.description == "" {
@@ -161,7 +204,7 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: UIDevice.getFloatValue(phone: 110, iPad: 180), height: UIDevice.getFloatValue(phone: 150, iPad: 240))
+        return CGSize(width: UIDevice.getFloatValue(phone: 140, iPad: 200), height: UIDevice.getFloatValue(phone: 270, iPad: 340))
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

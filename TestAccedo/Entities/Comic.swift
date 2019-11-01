@@ -8,14 +8,7 @@
 
 import Foundation
 
-struct DataComicResource: Decodable {
-    let data: ComicResource
-}
-
-struct ComicResource: Decodable {
-    let results: [Comic]
-}
-
 struct Comic: Decodable {
+    let title: String
     let thumbnail: Thumbnail
 }

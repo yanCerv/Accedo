@@ -12,6 +12,8 @@ class HomeController: UIViewController {
     let network = NetworkHomeController()
     let refreshControl = UIRefreshControl()
     
+    let loaderView = ActivityLoaderView()
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
@@ -34,6 +36,11 @@ class HomeController: UIViewController {
 
     var characters = [Characters]()
     var isPaginated = false
+    var isDonePaginating = false
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,40 +57,45 @@ class HomeController: UIViewController {
     }
     
     private func getCharacters() {
-        network.getCharacter(feed: .getCharacters) { (result) in
-            self.refreshControl.endRefreshing()
-            sleep(1)
+        network.getCharacter(feed: .getCharacters) { [weak self] (result) in
+            self?.refreshControl.endRefreshing()
             switch result {
             case .error(let error):
                 print(error)
+                self?.showAlert(title: "Error", message: "Error with server try reload later", style: .alert)
             case .success(let resources):
-                self.characters = resources?.data.results ?? []
-                self.tableView.reloadData()
-                self.activityIndicatorView.stopAnimating()
-                let sum = ApiKeys.offSet + 10
-                ApiKeys.offSet = sum
-                self.isPaginated = false
+                self?.characters = resources?.data.results ?? []
+                self?.updateData()
             }
         }
     }
     
     private func loadMoreCharacters() {
-        activityIndicatorView.startAnimating()
+        loaderView.isHidden = false
         network.getCharacter(feed: .getCharacters) { [weak self] (result) in
-            self?.activityIndicatorView.stopAnimating()
             switch result {
             case .error(let error):
                 print(error)
+                self?.showAlert(title: "Error", message: "Error with server try reload later", style: .alert)
             case .success(let resources):
+                if resources?.data.results.count == 0 {
+                    self?.isDonePaginating = true
+                }
                 self?.characters += resources?.data.results ?? []
-                let all = self?.characters.filterDuplicate { ( $0.id, $0.name, $0.thumbnail)}
+                let all = self?.characters.filterDuplicate { ( $0 )}
                 self?.characters = all ?? []
-                let sum = ApiKeys.offSet + 9
-                ApiKeys.offSet = sum
-                self?.tableView.reloadData()
+                self?.updateData()
                 self?.isPaginated = false
             }
         }
+    }
+    
+    func updateData() {
+        let sum = ApiKeys.offSet + 9
+        ApiKeys.offSet = sum
+        tableView.reloadData()
+        activityIndicatorView.stopAnimating()
+        loaderView.isHidden = true
     }
     
     private func setupRefreshControl() {
@@ -111,6 +123,13 @@ class HomeController: UIViewController {
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        tableView.addSubview(loaderView)
+        loaderView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 5).isActive = true
+        loaderView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+        loaderView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        loaderView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        loaderView.isHidden = true
     }
 }
 
