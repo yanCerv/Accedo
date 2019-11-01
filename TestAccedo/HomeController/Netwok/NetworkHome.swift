@@ -19,9 +19,9 @@ class NetworkHomeController: ApiClient {
         self.init(configuration: .default)
     }
     
-    func getCharacter(feed: Feed, completion: @escaping (Result<DataResource?, ErrorHandler>) -> Void) {
-        fetchData(request: feed.request, decode: { (json) -> DataResource? in
-            guard let resources = json as? DataResource else { return nil }
+    func getCharacter(feed: Feed, completion: @escaping (Result<DataCharacterResource?, ErrorHandler>) -> Void) {
+        fetchData(request: feed.request, decode: { (json) -> DataCharacterResource? in
+            guard let resources = json as? DataCharacterResource else { return nil }
             return resources
         }, completion: completion)
     }

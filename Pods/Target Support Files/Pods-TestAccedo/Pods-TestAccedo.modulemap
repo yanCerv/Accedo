@@ -1,0 +1,6 @@
+framework module Pods_TestAccedo {
+  umbrella header "Pods-TestAccedo-umbrella.h"
+
+  export *
+  module * { export * }
+}

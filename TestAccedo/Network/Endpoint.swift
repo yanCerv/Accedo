@@ -23,11 +23,11 @@ extension Endpoint {
     }
     
     var limit: URLQueryItem {
-        return URLQueryItem(name: "limit", value: "20")
+        return URLQueryItem(name: "limit", value: "\(ApiKeys.getlimitByDevice())")
     }
     
     var offset: URLQueryItem {
-        return URLQueryItem(name: "offset", value: "100")
+        return URLQueryItem(name: "offset", value: "\(ApiKeys.offSet)")
     }
     
     var ts: URLQueryItem {

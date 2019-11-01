@@ -31,6 +31,7 @@ extension ApiClient {
                         let model = try JSONDecoder().decode(decodingType, from: data)
                         completion(model, nil)
                     } catch {
+                        print(error.localizedDescription)
                         completion(nil, .jsonConversionFailure)
                     }
                 } else {
